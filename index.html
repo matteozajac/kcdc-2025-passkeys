@@ -1,0 +1,1552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Passkeys: The End of Passwords | Kansas City Developer Conference 2025</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/theme/black.min.css" id="theme">
+    
+    <!-- Import fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    
+    <!-- Restored previous sophisticated UI styles -->
+    <style>
+        :root {
+            /* Sophisticated color palette - Dark Theme (Default) */
+            --primary-blue: #4A90E2;
+            --primary-purple: #7B68EE;
+            --primary-teal: #4ECDC4;
+            --primary-coral: #FF6B6B;
+            --primary-gold: #FFA726;
+            --success-green: #4CAF50;
+            --dark-bg: #1A1F2E;
+            --darker-bg: #0F111A;
+            --card-bg: rgba(255, 255, 255, 0.03);
+            --text-primary: #FFFFFF;
+            --text-secondary: rgba(255, 255, 255, 0.7);
+            --text-muted: rgba(255, 255, 255, 0.5);
+            --border-color: rgba(255, 255, 255, 0.1);
+            --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --gradient-3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --gradient-4: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            --gradient-5: linear-gradient(135deg, #FA8BFF 0%, #2BD2FF 52%, #2BFF88 90%);
+            
+            /* Override Reveal.js theme colors */
+            --r-background-color: var(--darker-bg);
+            --r-main-color: var(--text-primary);
+            --r-heading-color: var(--text-primary);
+            --r-link-color: var(--primary-blue);
+            --r-link-color-hover: #6BA3E5;
+            --r-selection-background-color: var(--primary-blue);
+            
+            /* Pattern colors */
+            --pattern-color-1: rgba(255,255,255,.05);
+            --pattern-color-2: rgba(255,255,255,.03);
+            
+            /* Code colors */
+            --code-bg: linear-gradient(135deg, rgba(26, 31, 46, 0.9), rgba(15, 17, 26, 0.9));
+            --code-border: rgba(255, 255, 255, 0.1);
+            --code-keyword: #C792EA;
+            --code-string: #C3E88D;
+            --code-function: #82AAFF;
+            --code-comment: #546E7A;
+            
+            /* Other UI elements */
+            --slide-number-bg: rgba(0, 0, 0, 0.5);
+            --progress-bg: rgba(255, 255, 255, 0.1);
+            --hover-bg: rgba(255, 255, 255, 0.05);
+            --shadow-color: rgba(0, 0, 0, 0.2);
+        }
+        
+        /* Light Theme - follows system preference */
+        @media (prefers-color-scheme: light) {
+            :root {
+            --primary-blue: #2563eb;
+            --primary-purple: #7c3aed;
+            --primary-teal: #06b6d4;
+            --primary-coral: #ef4444;
+            --primary-gold: #f59e0b;
+            --success-green: #10b981;
+            --dark-bg: #ffffff;
+            --darker-bg: #f8fafc;
+            --card-bg: rgba(0, 0, 0, 0.02);
+            --text-primary: #1e293b;
+            --text-secondary: #475569;
+            --text-muted: #94a3b8;
+            --border-color: rgba(0, 0, 0, 0.08);
+            --gradient-5: linear-gradient(135deg, #8B5CF6 0%, #3B82F6 52%, #06B6D4 90%);
+            
+            /* Override Reveal.js theme colors */
+            --r-background-color: var(--darker-bg);
+            --r-main-color: var(--text-primary);
+            --r-heading-color: var(--text-primary);
+            --r-link-color: var(--primary-blue);
+            --r-link-color-hover: #1d4ed8;
+            --r-selection-background-color: var(--primary-blue);
+            
+            /* Pattern colors */
+            --pattern-color-1: rgba(0,0,0,.02);
+            --pattern-color-2: rgba(0,0,0,.01);
+            
+            /* Code colors */
+            --code-bg: linear-gradient(135deg, rgba(248, 250, 252, 0.95), rgba(241, 245, 249, 0.95));
+            --code-border: rgba(0, 0, 0, 0.1);
+            --code-keyword: #7c3aed;
+            --code-string: #059669;
+            --code-function: #2563eb;
+            --code-comment: #6b7280;
+            
+            /* Other UI elements */
+            --slide-number-bg: rgba(0, 0, 0, 0.08);
+            --progress-bg: rgba(0, 0, 0, 0.1);
+            --hover-bg: rgba(0, 0, 0, 0.03);
+            --shadow-color: rgba(0, 0, 0, 0.1);
+            }
+        }
+        
+        
+        /* Subtle animated background */
+        .reveal-viewport::before {
+            content: '';
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            opacity: 0.03;
+            background-image: 
+                repeating-linear-gradient(45deg, transparent, transparent 35px, var(--pattern-color-1) 35px, var(--pattern-color-1) 70px),
+                repeating-linear-gradient(-45deg, transparent, transparent 35px, var(--pattern-color-2) 35px, var(--pattern-color-2) 70px);
+            animation: bgSlide 60s linear infinite;
+        }
+        
+        @keyframes bgSlide {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(70px, 70px); }
+        }
+        
+        .reveal {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+        
+        .reveal h1, .reveal h2, .reveal h3, .reveal h4 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            line-height: 1.1;
+            text-transform: none;
+        }
+        
+        .reveal h1 {
+            font-size: clamp(40px, 8vw, 100px);
+            background: var(--gradient-5);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-size: 200% 200%;
+            animation: gradientFlow 8s ease infinite;
+            padding-bottom: 10px;
+            overflow: visible;
+        }
+        
+        @keyframes gradientFlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .reveal h2 {
+            font-size: clamp(32px, 6vw, 70px);
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        .reveal h3 {
+            font-size: clamp(20px, 3.5vw, 36px);
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+        
+        .reveal .subtitle {
+            font-size: clamp(16px, 2.5vw, 24px);
+            color: var(--text-secondary);
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 20px auto;
+        }
+        
+        /* Modern list styling */
+        .reveal ul {
+            display: block;
+            margin-left: 0;
+            list-style: none;
+            font-size: clamp(18px, 2.5vw, 28px);
+            line-height: 1.6;
+        }
+        
+        .reveal ul li {
+            margin: 15px 0;
+            padding: 20px 30px;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            position: relative;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .reveal ul li:hover {
+            transform: translateX(8px);
+            background: var(--hover-bg);
+            border-color: var(--primary-blue);
+        }
+        
+        .reveal ul li:before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: var(--gradient-1);
+            border-radius: 16px 0 0 16px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .reveal ul li:hover:before {
+            opacity: 1;
+        }
+        
+        /* Clean code blocks */
+        .reveal pre {
+            box-shadow: none;
+            width: 100%;
+            margin: 20px auto;
+        }
+        
+        .reveal pre code {
+            background: var(--code-bg);
+            border: 1px solid var(--code-border);
+            border-radius: 16px;
+            padding: 30px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: clamp(12px, 2vw, 18px);
+            line-height: 1.6;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+        
+        .code-keyword { color: var(--code-keyword); }
+        .code-string { color: var(--code-string); }
+        .code-function { color: var(--code-function); }
+        .code-comment { color: var(--code-comment); font-style: italic; }
+        
+        /* Data cards */
+        .data-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 25px;
+            margin: 10px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .data-card:hover {
+            transform: translateY(-5px);
+            background: var(--hover-bg);
+            box-shadow: 0 15px 35px var(--shadow-color);
+        }
+        
+        .stat-number {
+            font-size: clamp(36px, 5vw, 60px);
+            font-weight: 800;
+            background: var(--gradient-1);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .stat-label {
+            font-size: clamp(16px, 2vw, 22px);
+            color: var(--text-secondary);
+            margin-top: 10px;
+        }
+        
+        /* Comparison grid */
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            max-width: 1000px;
+            margin: 30px auto;
+        }
+        
+        .comparison-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 25px;
+            border: 1px solid var(--border-color);
+            text-align: left;
+        }
+        
+        .comparison-card.negative {
+            border-left: 4px solid var(--primary-coral);
+        }
+        
+        .comparison-card.positive {
+            border-left: 4px solid var(--success-green);
+        }
+        
+        .comparison-card h4 {
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+        
+        .comparison-card.negative h4 {
+            color: var(--primary-coral);
+        }
+        
+        .comparison-card.positive h4 {
+            color: var(--success-green);
+        }
+        
+        .comparison-card ul {
+            font-size: 20px;
+            padding: 0 0 0 20px;
+            margin: 0;
+        }
+        
+        .comparison-card ul li {
+            background: none;
+            border: none;
+            padding: 10px 0 10px 10px;
+            margin: 5px 0;
+            color: var(--text-secondary);
+        }
+        
+        .comparison-card ul li:hover {
+            transform: none;
+            background: none;
+            border-color: transparent;
+        }
+        
+        .comparison-card ul li:before {
+            display: none;
+        }
+        
+        /* Impact text */
+        .impact-text {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(36px, 6vw, 80px);
+            font-weight: 700;
+            line-height: 1.1;
+            margin: 40px 0;
+        }
+        
+        /* Placeholder styles */
+        .placeholder {
+            width: 90%;
+            max-width: 900px;
+            padding: 60px;
+            margin: 30px auto;
+            background: var(--card-bg);
+            border: 2px dashed var(--border-color);
+            border-radius: 20px;
+            font-size: 20px;
+            color: var(--text-muted);
+            backdrop-filter: blur(10px);
+        }
+        
+        /* Icon placeholder */
+        .icon-placeholder {
+            width: 120px;
+            height: 120px;
+            margin: 30px auto;
+            border: 2px dashed var(--border-color);
+            border-radius: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            color: var(--text-muted);
+        }
+        
+        /* Accent colors */
+        .accent-blue { color: var(--primary-blue) !important; }
+        .accent-purple { color: var(--primary-purple) !important; }
+        .accent-teal { color: var(--primary-teal) !important; }
+        .accent-coral { color: var(--primary-coral) !important; }
+        .accent-gold { color: var(--primary-gold) !important; }
+        .accent-green { color: var(--success-green) !important; }
+        
+        /* Slide number styling */
+        .reveal .slide-number {
+            background: var(--slide-number-bg);
+            padding: 8px 16px;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            font-size: 16px;
+            color: var(--text-muted);
+        }
+        
+        /* Progress bar */
+        .reveal .progress {
+            height: 3px;
+            background: var(--progress-bg);
+        }
+        
+        .reveal .progress span {
+            background: var(--gradient-1);
+        }
+        
+        /* Controls */
+        .reveal .controls {
+            color: var(--primary-blue);
+        }
+        
+        /* Remove default list styling for comparison cards */
+        .comparison-card ul li::before {
+            content: '• ';
+            color: var(--text-muted);
+            margin-right: 10px;
+        }
+        
+        /* Geometric accents */
+        .geometric-accent {
+            position: absolute;
+            opacity: 0.1;
+            z-index: -1;
+        }
+        
+        .accent-circle {
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: var(--gradient-1);
+            top: -150px;
+            right: -150px;
+            filter: blur(60px);
+        }
+        
+        .accent-square {
+            width: 200px;
+            height: 200px;
+            background: var(--gradient-3);
+            bottom: -100px;
+            left: -100px;
+            transform: rotate(45deg);
+            filter: blur(40px);
+        }
+    </style>
+</head>
+<body>
+    <div class="reveal">
+        <div class="slides">
+            <!-- Slide 1: Title -->
+            <section>
+                <div class="geometric-accent accent-circle"></div>
+                <h1>Passkeys</h1>
+                <h3>The End of Passwords and the Future of Authentication</h3>
+                <div class="subtitle">
+                    <strong>Kansas City Developer Conference 2025</strong><br><br>
+                    Mateusz Zając<br>
+                    Software Engineering Manager • Mobile Apps
+                </div>
+                <aside class="notes">
+                    Good afternoon, everyone! Thank you for joining me at KCDC 2025. Today we're diving into passkeys—the technology that's finally ending passwords as we know them. I'm Mateusz Zając, a software engineering manager specializing in mobile apps and authentication. We'll cover why passwords fail us, how passkeys solve these problems, implementation with code examples, and what's new in 2025 with over 1 billion passkey users worldwide. By the end, you'll be ready to implement passkeys in your own projects.
+                </aside>
+            </section>
+            
+            <!-- Slide 2: Hook -->
+            <section>
+                <div class="impact-text accent-blue">Ready to ditch passwords?</div>
+                <div class="icon-placeholder">🔓</div>
+                <aside class="notes">
+                    How many of you have reset a password in the last week? Imagine never needing to do that again. No more complex passwords, no more reset emails, no more phishing vulnerabilities. Passkeys make this possible—they're phishing-proof by design and gaining massive traction in 2025, especially in banking and travel. Let's see why they're the future.
+                </aside>
+            </section>
+            
+            <!-- Slide 3: Passkeys Promise -->
+            <section>
+                <h2>Passkeys Promise</h2>
+                <ul>
+                    <li class="fragment">🔐 Public-key crypto + biometrics</li>
+                    <li class="fragment">🛡️ Phishing-proof by design</li>
+                    <li class="fragment">⚡ Convenient one-tap sign-in</li>
+                    <li class="fragment">🔒 Secure: Nothing sensitive on servers</li>
+                </ul>
+                <aside class="notes">
+                    What are passkeys?
+                    
+                    CLICK: They're built on public-key cryptography paired with biometrics like Face ID.
+                    
+                    CLICK: They're phishing-proof because keys are cryptographically bound to specific domains.
+                    
+                    CLICK: One-tap sign-ins are more convenient than passwords.
+                    
+                    CLICK: And servers store only public keys—nothing sensitive to steal.
+                    
+                    Microsoft reports 20% reduction in password usage with their simplified enrollment. It's security without the usual tradeoffs.
+                </aside>
+            </section>
+            
+            <!-- Slide 4: Adoption -->
+            <section>
+                <h2>Adopted by</h2>
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; max-width: 700px; margin: 30px auto;">
+                    <div class="data-card">
+                        <div class="stat-number">Apple</div>
+                        <div class="stat-label">iOS, macOS, Safari</div>
+                    </div>
+                    <div class="data-card">
+                        <div class="stat-number">Google</div>
+                        <div class="stat-label">Android, Chrome</div>
+                    </div>
+                    <div class="data-card">
+                        <div class="stat-number">Others</div>
+                        <div class="stat-label">Microsoft, FIDO Alliance</div>
+                    </div>
+                    <div class="data-card">
+                        <div class="stat-number">1B+</div>
+                        <div class="stat-label">Users in 2025</div>
+                    </div>
+                </div>
+                <div style="display: flex; justify-content: center; align-items: center; gap: 40px; margin: 30px auto; padding: 30px; background: var(--card-bg); border-radius: 20px; max-width: 800px;">
+                    <img src="apple_logo.svg" alt="Apple" style="height: 60px; filter: invert(1);">
+                    <img src="google_logo.svg" alt="Google" style="height: 50px;">
+                    <img src="microsoft_logo.svg" alt="Microsoft" style="height: 45px;">
+                </div>
+                <aside class="notes">
+                    This isn't some fringe tech—passkeys are being championed by the biggest names in the industry. Apple has been leading with integrations in iOS and macOS, Google is rolling them out across Android and Chrome, and others like Microsoft and the FIDO Alliance are pushing widespread adoption. According to the FIDO Alliance's 2024 Online Authentication Barometer, passkey awareness has reached 52% globally, with over 1 billion enabled accounts across major platforms. In sectors like banking and payments, we're seeing major rollouts, making passkeys mainstream. If these giants are betting on it, it's time for us developers to get on board.
+                </aside>
+            </section>
+            
+            <!-- Slide 5: Business Benefits -->
+            <section>
+                <h2>Business wins</h2>
+                <ul>
+                    <li class="fragment">🛡️ Fewer breaches</li>
+                    <li class="fragment">✨ Simpler flows</li>
+                    <li class="fragment">💰 Lower costs</li>
+                </ul>
+                <aside class="notes">
+                    From a business perspective, passkeys are a no-brainer. [CLICK] They drastically reduce breaches by eliminating phishable credentials—according to recent reports, stolen credentials remain a top attack vector. [CLICK] User flows become simpler: no more multi-step 2FA hassles, just seamless sign-ins. [CLICK] And support costs plummet—fewer password reset tickets mean happier teams and users. In 2025, with passkeys moving to mainstream in industries like travel, companies are reporting lower fraud rates and better retention. It's not just about security; it's about improving the bottom line while delighting users.
+                </aside>
+            </section>
+            
+            <!-- Slide 6: Session Goals -->
+            <section>
+                <h2>Goals</h2>
+                <ul>
+                    <li class="fragment">🔑 What are passkeys?</li>
+                    <li class="fragment">⚔️ Vs. passwords</li>
+                    <li class="fragment">💻 Implementation</li>
+                    <li class="fragment">🎯 Best practices</li>
+                </ul>
+                <aside class="notes">
+                    Here's our roadmap: [CLICK] Define passkeys and their advantages. [CLICK] Compare with passwords side-by-side. [CLICK] Implementation with real code examples. [CLICK] Best practices for deployment and recovery. We'll wrap up in about 35 minutes with time for questions.
+                </aside>
+            </section>
+            
+            <!-- Slide 7: Password Pitfalls -->
+            <section>
+                <div class="impact-text accent-coral">Password pitfalls.</div>
+                <div class="icon-placeholder">😤</div>
+                <aside class="notes">
+                    Before we celebrate passkeys, let's honestly address why passwords are still a problem in 2025. Despite all our efforts with managers and policies, they're fundamentally flawed—easy to guess, reuse, or steal. We've tolerated them for decades, but with rising cyber threats, it's time to move on. I'll break this down with real examples and stats to show the urgency.
+                </aside>
+            </section>
+            
+            <!-- Slide 8: Phishing Attacks -->
+            <section>
+                <h2>Attacks</h2>
+                <h3 class="accent-coral">Phishing. Real-world example.</h3>
+                <img src="phishing_email_screenshot.png" alt="Phishing email example" style="max-width: 70%; max-height: 450px; margin: 20px auto; display: block; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); object-fit: contain;">
+                <aside class="notes">
+                    One of the biggest threats is phishing. Let me share a personal anecdote: Last year at an airport, I almost fell for a fake app login via public WiFi—it looked identical to the real thing. According to Verizon's 2024 Data Breach Investigations Report, 36% of breaches involved phishing, and in larger companies, that means dozens of potential incidents. In 2025, with passkeys' phishing resistance, this vector is virtually eliminated, but passwords keep us vulnerable.
+                </aside>
+            </section>
+            
+            <!-- Slide 9: Other Attacks -->
+            <section>
+                <div class="impact-text">
+                    <span class="accent-coral">Credential stuffing.</span><br>
+                    <span class="accent-coral">Server breaches.</span>
+                </div>
+                <aside class="notes">
+                    Beyond phishing, credential stuffing exploits reused passwords across sites—if one account falls, others follow. And server breaches? According to the 2024 Verizon DBIR, stolen credentials remain the most common initial attack vector. When passwords are hashed and stored on servers, they can be cracked offline. These attacks create a vicious cycle, but passkeys break it by design—no reusable secrets means no stuffing.
+                </aside>
+            </section>
+            
+            <!-- Slide 10: UX Nightmares -->
+            <section>
+                <h2>UX nightmares</h2>
+                <ul>
+                    <li>😵 Complex rules.</li>
+                    <li>🔄 Resets.</li>
+                    <li>📅 Rotations.</li>
+                </ul>
+                <img src="password_complexity_error.png" alt="Password complexity error" style="max-width: 65%; max-height: 450px; margin: 20px auto; display: block; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); object-fit: contain;">
+                <aside class="notes">
+                    On the user experience front, passwords are a nightmare. Endless complexity rules like 'must include a symbol and number,' frequent resets every 90 days, and rotations that force changes lead to weak, forgettable passwords. Users end up frustrated, writing them down or reusing them—defeating the purpose. Ask yourself: How many support calls does your team handle for resets weekly? Passkeys eliminate this entirely.
+                </aside>
+            </section>
+            
+            <!-- Slide 11: Comparison -->
+            <section>
+                <h2>Password vs. Passkey: Creation</h2>
+                <div class="comparison-grid">
+                    <div class="comparison-card negative">
+                        <h4>Password Creation</h4>
+                        <ul>
+                            <li>⌨️ Type twice</li>
+                            <li>📝 Meet complexity rules</li>
+                            <li>🤞 Hope it's strong</li>
+                        </ul>
+                    </div>
+                    <div class="comparison-card positive">
+                        <h4>Passkey Creation</h4>
+                        <ul>
+                            <li>🔐 Auto-generated</li>
+                            <li>😊 Face ID confirmation</li>
+                            <li>⚡ Done in seconds</li>
+                        </ul>
+                    </div>
+                </div>
+                <aside class="notes">
+                    Let's visualize this with a side-by-side comparison. Creating a password: Type it twice, satisfy rules, hope it's strong. Creating a passkey: The system generates a strong key pair automatically, you just confirm with Face ID—done in seconds. This isn't just faster; it's more secure by default. In 2025, Apple's updates make this even smoother with new APIs for streamlined sign-up.
+                </aside>
+            </section>
+            
+            <!-- Password Reset Flow Slides -->
+            <!-- Slide 11a: Password Reset Step 0 -->
+            <section>
+                <h2>Password Reset Journey</h2>
+                <h3 class="accent-coral">Step 1: Forgot Password</h3>
+                <img src="reset_password_0.png" alt="Password reset step 0" style="max-width: 60%; max-height: 450px; margin: 20px auto; display: block; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); object-fit: contain;">
+                <aside class="notes">
+                    Let's walk through the painful journey of resetting a password. This is what users face every time they forget their credentials. Step 1: Click "Forgot Password" - the admission of defeat.
+                </aside>
+            </section>
+            
+            <!-- Slide 11b: Password Reset Step 1 -->
+            <section>
+                <h3 class="accent-coral">Step 2: Enter Email</h3>
+                <img src="reset_password_1.png" alt="Password reset step 1" style="max-width: 60%; max-height: 450px; margin: 20px auto; display: block; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); object-fit: contain;">
+                <aside class="notes">
+                    Step 2: Enter your email address and hope you remember which one you used for this account.
+                </aside>
+            </section>
+            
+            <!-- Slide 11c: Password Reset Step 2 -->
+            <section>
+                <h3 class="accent-coral">Step 3: Check Your Email</h3>
+                <img src="reset_password_2.png" alt="Password reset step 2" style="max-width: 60%; max-height: 450px; margin: 20px auto; display: block; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); object-fit: contain;">
+                <aside class="notes">
+                    Step 3: Wait for the email. Check your inbox, check spam, wonder if you typed the email correctly.
+                </aside>
+            </section>
+            
+            <!-- Slide 11d: Password Reset Step 3 -->
+            <section>
+                <h3 class="accent-coral">Step 4: Find the Reset Email</h3>
+                <img src="reset_password_3.png" alt="Password reset step 3" style="max-width: 60%; max-height: 450px; margin: 20px auto; display: block; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); object-fit: contain;">
+                <aside class="notes">
+                    Step 4: Finally find the reset email among all the other password reset emails from other services.
+                </aside>
+            </section>
+            
+            <!-- Slide 11e: Password Reset Step 4 -->
+            <section>
+                <h3 class="accent-coral">Step 5: Click the Link</h3>
+                <img src="reset_password_4.png" alt="Password reset step 4" style="max-width: 60%; max-height: 450px; margin: 20px auto; display: block; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); object-fit: contain;">
+                <aside class="notes">
+                    Step 5: Click the reset link and hope it hasn't expired yet. Many expire in just 15 minutes.
+                </aside>
+            </section>
+            
+            <!-- Slide 11f: Password Reset Step 5 -->
+            <section>
+                <h3 class="accent-coral">Step 6: Create New Password</h3>
+                <img src="reset_password_5.png" alt="Password reset step 5" style="max-width: 60%; max-height: 450px; margin: 20px auto; display: block; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); object-fit: contain;">
+                <aside class="notes">
+                    Step 6: Create a new password that meets all the complexity requirements. Try to make it memorable this time, but different from your last 5 passwords.
+                </aside>
+            </section>
+            
+            <!-- Slide 11g: Password Reset Step 6 -->
+            <section>
+                <h3 class="accent-coral">Step 7: Confirm Password</h3>
+                <img src="reset_password_6.png" alt="Password reset step 6" style="max-width: 60%; max-height: 450px; margin: 20px auto; display: block; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); object-fit: contain;">
+                <aside class="notes">
+                    Step 7: Type it again to confirm. Hope you didn't make a typo the first time.
+                </aside>
+            </section>
+            
+            <!-- Slide 11h: Password Reset Step 7 -->
+            <section>
+                <h3 class="accent-coral">Step 8: Success... Until Next Time</h3>
+                <img src="reset_password_7.png" alt="Password reset step 7" style="max-width: 60%; max-height: 450px; margin: 20px auto; display: block; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); object-fit: contain;">
+                <aside class="notes">
+                    Step 8: Success! You're back in. Now try to remember this new password... until you have to reset it again in a few weeks. According to HYPR's 2023 authentication report, 57% of users have forgotten a password after resetting it, and password resets account for 20-50% of help desk calls.
+                </aside>
+            </section>
+            
+            <!-- Slide 11h-stats: Password Problem Statistics -->
+            <section>
+                <div class="impact-text accent-coral">The Numbers Don't Lie</div>
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 30px; max-width: 900px; margin: 40px auto;">
+                    <div class="data-card fragment">
+                        <div class="stat-number" style="font-size: 72px;">81%</div>
+                        <div class="stat-label">of breaches involve<br>compromised credentials</div>
+                    </div>
+                    <div class="data-card fragment">
+                        <div class="stat-number" style="font-size: 72px;">51%</div>
+                        <div class="stat-label">of people reuse<br>the same password</div>
+                    </div>
+                    <div class="data-card fragment">
+                        <div class="stat-number" style="font-size: 72px;">2.5M</div>
+                        <div class="stat-label">passwords stolen<br>every week</div>
+                    </div>
+                    <div class="data-card fragment">
+                        <div class="stat-number" style="font-size: 72px;">40%</div>
+                        <div class="stat-label">of help desk calls<br>are password resets</div>
+                    </div>
+                </div>
+                <aside class="notes">
+                    Let's pause and look at the real numbers behind password problems. [CLICK] 81% of breaches involve compromised credentials according to Verizon. [CLICK] Over half of users admit to reusing passwords across sites. [CLICK] 2.5 million passwords are stolen every single week globally. [CLICK] And 40% of IT help desk calls are just password resets. These aren't small problems—they're massive security and productivity drains.
+                </aside>
+            </section>
+            
+            <!-- Slide 11i: Comparison After Reset Flow -->
+            <section>
+                <h2>Compare: Passwords vs. Passkeys</h2>
+                <div class="comparison-grid">
+                    <div class="comparison-card negative">
+                        <h4>Password Reset</h4>
+                        <ul>
+                            <li class="fragment">📋 8+ steps</li>
+                            <li class="fragment">📧 Email dependency</li>
+                            <li class="fragment">⏰ 5-10 minutes</li>
+                            <li class="fragment">😤 Frustration guaranteed</li>
+                        </ul>
+                    </div>
+                    <div class="comparison-card positive">
+                        <h4>Passkey Recovery</h4>
+                        <ul>
+                            <li class="fragment">☁️ Synced via iCloud</li>
+                            <li class="fragment">🔓 Face ID instant access</li>
+                            <li class="fragment">✅ No reset needed</li>
+                            <li class="fragment">🚀 Works immediately</li>
+                        </ul>
+                    </div>
+                </div>
+                <aside class="notes">
+                    After seeing that painful 8-step process, the contrast is clear. Look at what password reset requires: [CLICK] 8+ steps to complete. [CLICK] Email dependency that can fail. [CLICK] 5-10 minutes of your time. [CLICK] Frustration guaranteed. Now compare with passkeys: [CLICK] They're synced via iCloud automatically. [CLICK] Face ID gives instant access. [CLICK] No reset process needed ever. [CLICK] Works immediately every time. This eliminates one of the biggest pain points in digital authentication.
+                </aside>
+            </section>
+            
+            <!-- Slide 11j: Authentication Failure Stats -->
+            <section>
+                <div class="impact-text accent-purple">Authentication Failures</div>
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 25px; max-width: 800px; margin: 40px auto;">
+                    <div class="data-card fragment">
+                        <div class="stat-number" style="font-size: 64px; background: var(--gradient-2); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent;">33%</div>
+                        <div class="stat-label">of users abandon<br>cart due to forgotten password</div>
+                    </div>
+                    <div class="data-card fragment">
+                        <div class="stat-number" style="font-size: 64px; background: var(--gradient-2); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent;">92%</div>
+                        <div class="stat-label">of users leave site<br>when password fails</div>
+                    </div>
+                </div>
+                <p class="fragment" style="font-size: 28px; color: var(--success-green); margin-top: 40px; text-align: center;">
+                    <strong>Passkeys eliminate ALL of these failures</strong>
+                </p>
+                <aside class="notes">
+                    The cost of authentication failure is staggering: [CLICK] One-third of users abandon shopping carts when they can't remember passwords. [CLICK] 92% leave websites entirely after password failures—they don't even try to reset. [CLICK] Passkeys eliminate all of these failure points—no passwords means no forgotten passwords, no failed logins, no abandoned carts.
+                </aside>
+            </section>
+            
+            <!-- Slide 12: 2FA Fails -->
+            <section>
+                <div style="display: flex; align-items: stretch; justify-content: space-between; gap: 40px; height: 80vh;">
+                    <div style="flex: 1; display: flex; flex-direction: column; justify-content: center;">
+                        <h2 style="margin-bottom: 40px;">2FA fails</h2>
+                        <ul style="margin: 0;">
+                            <li>📱 SMS phishable.</li>
+                            <li class="fragment" data-fragment-index="1">😩 Push fatigue.</li>
+                        </ul>
+                    </div>
+                    <img src="push_fatique_attack.png" alt="Push fatigue attack example" class="fragment" data-fragment-index="1" style="flex: 1; max-width: 50%; height: 100%; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); object-fit: contain;">
+                </div>
+                <aside class="notes">
+                    Many think layering 2FA fixes passwords, but it doesn't. SMS codes are easily phished—just like passwords. Time-based codes (TOTP) suffer the same fate. [CLICK] Push notifications lead to 'push fatigue,' where users approve out of annoyance. This image shows how attackers exploit push fatigue - bombarding users with approval requests until they give in. Recent attacks like the Uber and Cisco breaches exploited this exactly. Passkeys replace the broken primary factor, making extra layers unnecessary—and in 2025, they're proving more effective than traditional MFA.
+                </aside>
+            </section>
+            
+            <!-- Slide 13: Passkey Definition -->
+            <section>
+                <h2>Passkey</h2>
+                <ul>
+                    <li>🔑 Key pair.</li>
+                    <li>🔓🔒 Public/private.</li>
+                    <li>⚔️ vs. Hashed passwords.</li>
+                </ul>
+                <img src="key_pair_flow_diagram.png" alt="Key pair flow diagram" style="max-width: 70%; max-height: 450px; margin: 20px auto; display: block; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); object-fit: contain;">
+                <aside class="notes">
+                    Now, let's define a passkey: It's a pair of cryptographic keys—public stored on the server (not secret), private kept securely on your device. Unlike hashed passwords, which can be stolen and cracked from servers, passkeys have nothing valuable to leak. The device signs challenges locally, keeping the private key safe. This is like SSH keys but user-friendly, and with 2025's mainstream adoption, over 1 billion people are using them daily.
+                </aside>
+            </section>
+            
+            <!-- Slide 14: Simple Explanation - Like You're 5 -->
+            <section>
+                <h2>How Passkeys Work</h2>
+                <h3 class="accent-blue" style="margin-bottom: 30px;">Explained Simply 🔐</h3>
+                <div style="max-width: 900px; margin: 0 auto;">
+                    <div class="fragment" data-fragment-index="1" style="margin: 30px 0;">
+                        <h4 style="color: var(--primary-gold);">Step 1: You have a magic lockbox 📱</h4>
+                        <p style="font-size: 24px;">Your phone creates two special keys: one to keep secret (private), one to share (public)</p>
+                    </div>
+                    <div class="fragment" data-fragment-index="2" style="margin: 30px 0;">
+                        <h4 style="color: var(--primary-teal);">Step 2: Website gets your sharing key 🌐</h4>
+                        <p style="font-size: 24px;">You give the website your public key - it's safe to share!</p>
+                    </div>
+                    <div class="fragment" data-fragment-index="3" style="margin: 30px 0;">
+                        <h4 style="color: var(--primary-purple);">Step 3: Website sends you a puzzle 🧩</h4>
+                        <p style="font-size: 24px;">When you log in, the website sends a challenge only your secret key can solve</p>
+                    </div>
+                    <div class="fragment" data-fragment-index="4" style="margin: 30px 0;">
+                        <h4 style="color: var(--success-green);">Step 4: Your phone proves it's you ✅</h4>
+                        <p style="font-size: 24px;">Face ID + secret key = solved puzzle = you're in!</p>
+                    </div>
+                </div>
+                <aside class="notes">
+                    Let me explain passkeys like you're five years old. [CLICK] Imagine your phone has a magic lockbox with two keys - one you keep secret, one you can share. [CLICK] You give websites the sharing key - it's totally safe, like giving someone your address. [CLICK] When you want to log in, the website sends you a puzzle that only your secret key can solve. [CLICK] You use Face ID, your phone uses the secret key to solve the puzzle, and boom - you're in! The website never knows your secret, and bad guys can't trick you because the puzzle only works for the real website.
+                </aside>
+            </section>
+            
+            <!-- Slide 15a: Amazon Example - Setup -->
+            <section>
+                <h2>Example: Amazon Login</h2>
+                <h3 class="accent-gold">📱 Step 1: One-Time Setup</h3>
+                <div style="max-width: 800px; margin: 40px auto; background: var(--card-bg); padding: 40px; border-radius: 20px;">
+                    <p style="font-size: 28px; margin-bottom: 30px;">Your device creates a cryptographic key pair:</p>
+                    <div style="margin: 30px 0;">
+                        <h4 style="color: var(--primary-coral); font-size: 26px;">🔐 Private Key: Your digital signature creator</h4>
+                        <p style="font-size: 22px; color: var(--text-secondary);">Used to sign challenges - stored in Secure Enclave, never transmitted</p>
+                    </div>
+                    <div style="margin: 30px 0;">
+                        <h4 style="color: var(--primary-teal); font-size: 26px;">📮 Public Key: Your signature verifier</h4>
+                        <p style="font-size: 22px; color: var(--text-secondary);">Amazon stores this to verify your signatures are authentic</p>
+                    </div>
+                    <p style="font-size: 20px; color: var(--accent-gold); margin-top: 30px; text-align: center;">🔑 Based on FIDO2/WebAuthn standards using public key cryptography</p>
+                </div>
+                <aside class="notes">
+                    Let's walk through a real example - logging into Amazon. First, during setup, your device generates an asymmetric key pair using the WebAuthn API. The private key is stored securely in your device's hardware security module or Secure Enclave - it's used to create digital signatures. The public key is sent to Amazon's servers where it's associated with your account. This is based on FIDO2 standards using elliptic curve cryptography, typically P-256. This registration happens once when you first set up your passkey.
+                </aside>
+            </section>
+            
+            <!-- Slide 15b: Amazon Example - Challenge -->
+            <section>
+                <h2>Example: Amazon Login</h2>
+                <h3 class="accent-purple">🧩 Step 2: Login Challenge</h3>
+                <div style="max-width: 800px; margin: 40px auto; background: var(--card-bg); padding: 40px; border-radius: 20px;">
+                    <p style="font-size: 28px; margin-bottom: 30px;">You visit Amazon.com to sign in...</p>
+                    <div style="background: rgba(255,255,255,0.05); padding: 30px; border-radius: 16px; border: 2px solid var(--primary-purple);">
+                        <p style="font-size: 24px; margin-bottom: 20px;">Amazon sends you a cryptographic challenge:</p>
+                        <code style="display: block; background: rgba(255,255,255,0.1); padding: 20px; border-radius: 12px; font-size: 22px; color: var(--primary-purple);">
+                            "Challenge: 7B3A9F2E4D6C8A1B
+                            Origin: https://amazon.com
+                            Timestamp: 2025-01-14T14:45:00Z"
+                        </code>
+                        <p style="font-size: 20px; color: var(--text-muted); margin-top: 20px;">✍️ Your device signs this with your private key</p>
+                        <p style="font-size: 18px; color: var(--accent-gold); margin-top: 15px;">The signature proves you possess the private key without revealing it</p>
+                    </div>
+                </div>
+                <aside class="notes">
+                    When you try to login, Amazon sends you a unique challenge - like a document with a timestamp and random number. This prevents replay attacks where someone might try to reuse an old signature. Think of it like a bank asking you to sign a check with today's date. Only you have the private key that can create the correct digital signature for this specific challenge.
+                </aside>
+            </section>
+            
+            <!-- Slide 15c: Amazon Example - Response -->
+            <section>
+                <h2>Example: Amazon Login</h2>
+                <h3 class="accent-green">✅ Step 3: Your Phone Responds</h3>
+                <div style="max-width: 800px; margin: 40px auto; background: var(--card-bg); padding: 40px; border-radius: 20px;">
+                    <ol style="font-size: 24px; line-height: 2;">
+                        <li class="fragment">👤 Face ID scan → <span style="color: var(--success-green);">"Yes, it's you!"</span></li>
+                        <li class="fragment">🔐 Private key signs the challenge → <span style="color: var(--primary-gold);">Creates cryptographic signature</span></li>
+                        <li class="fragment">📤 WebAuthn response sent → <span style="color: var(--primary-teal);">Signature + authenticator data</span></li>
+                        <li class="fragment">✨ Server verifies with public key → <span style="color: var(--success-green);">Signature valid = Authenticated!</span></li>
+                    </ol>
+                </div>
+                <aside class="notes">
+                    Here's the magic: [CLICK] Face ID verifies it's really you. [CLICK] Your device uses the private key to create a cryptographic signature using the challenge data. [CLICK] The WebAuthn response, including the signature and authenticator data, is sent back to Amazon. [CLICK] Amazon verifies the signature using your public key stored on their servers. If valid, you're authenticated! All of this happens in about one second, with no secrets transmitted over the network.
+                </aside>
+            </section>
+            
+            <!-- Slide 15d: Amazon Example - Anti-Phishing -->
+            <section>
+                <h2>Example: Amazon Login</h2>
+                <h3 class="accent-coral">🚫 Step 4: Phishing Protection</h3>
+                <div style="max-width: 800px; margin: 40px auto;">
+                    <div style="background: linear-gradient(135deg, rgba(227, 24, 55, 0.1), rgba(255, 107, 107, 0.1)); padding: 40px; border-radius: 20px; border: 3px solid var(--primary-coral);">
+                        <h4 style="font-size: 28px; margin-bottom: 30px;">If a scammer tries...</h4>
+                        <div style="font-size: 22px; line-height: 1.8;">
+                            <p class="fragment">🎭 Fake site: <strong>"Amazom.com"</strong> (note the typo!)</p>
+                            <p class="fragment">📨 They ask you to sign: <strong>"HELLO AMAZOM"</strong></p>
+                            <p class="fragment">🛡️ Your phone checks: <strong style="color: var(--primary-coral);">"This isn't Amazon.com!"</strong></p>
+                            <p class="fragment">🔒 Your SECRET-ENCODER: <strong style="color: var(--primary-gold);">Refuses to sign!</strong></p>
+                            <p class="fragment">❌ Why? <strong style="color: var(--text-muted);">Passkeys are locked to domains!</strong></p>
+                            <p class="fragment">🚫 Result: <strong style="color: var(--success-green);">No signature = No login!</strong></p>
+                        </div>
+                    </div>
+                    <p class="fragment" style="font-size: 24px; color: var(--success-green); margin-top: 30px; text-align: center;">
+                        Your passkey only signs for real Amazon.com! 🎯
+                    </p>
+                </div>
+                <aside class="notes">
+                    Here's why passkeys are phishing-proof: [CLICK] A scammer creates a fake Amazon site - maybe Amazom.com with a typo. [CLICK] They ask you to sign their challenge. [CLICK] Your phone checks the domain first. [CLICK] Your passkey refuses to sign - it's not the real Amazon! [CLICK] Why? Passkeys are cryptographically bound to specific domains. [CLICK] Result: No signature means no login. [CLICK] Your passkey only works on the real Amazon.com. Even if the scammer somehow got a signature, Amazon wouldn't accept it because they never sent that challenge. It's like your signature pen only working on official Amazon documents!
+                </aside>
+            </section>
+            
+            <!-- Slide 15e: Real World Key Analogies -->
+            <section>
+                <h2>Real-World Analogies</h2>
+                <h3 class="accent-blue">Understanding Public/Private Keys</h3>
+                <div style="max-width: 900px; margin: 30px auto;">
+                    <div class="fragment" style="background: var(--card-bg); padding: 25px; border-radius: 16px; margin-bottom: 20px;">
+                        <h4 style="color: var(--primary-gold); font-size: 24px;">🔏 Padlock & Key</h4>
+                        <p style="font-size: 20px;"><strong>Public:</strong> Open padlock (anyone can lock)</p>
+                        <p style="font-size: 20px;"><strong>Private:</strong> Only your key can unlock</p>
+                    </div>
+                    <div class="fragment" style="background: var(--card-bg); padding: 25px; border-radius: 16px;">
+                        <h4 style="color: var(--primary-purple); font-size: 24px;">🏦 Bank Signature Card</h4>
+                        <p style="font-size: 20px;"><strong>Private:</strong> Your hand that signs</p>
+                        <p style="font-size: 20px;"><strong>Public:</strong> Signature on file at bank to verify</p>
+                    </div>
+                </div>
+                <aside class="notes">
+                    Let me give you better real-world analogies for public/private keys: [CLICK] Padlock and key - anyone can snap your open padlock shut (encrypt with public key), but only you have the key to open it (decrypt with private key). [CLICK] Wax seal - you have a unique seal ring (private key) that creates an impression. Anyone can check if the seal matches your known pattern (public key) but can't forge it. [CLICK] Bank signature - your hand creates signatures (private key), the bank keeps your signature card on file to verify (public key). These all share the same principle: one part creates or unlocks, the other verifies or locks.
+                </aside>
+            </section>
+            
+            <!-- Slide 16: Security Advantages -->
+            <section>
+                <div class="impact-text">
+                    <span class="accent-green">Phishing-resistant.</span><br>
+                    <span class="accent-green">No server secrets.</span>
+                </div>
+                <aside class="notes">
+                    Key advantages: Passkeys are phishing-resistant because they're cryptographically bound to the domain or app—you can't use them on fakes. Servers hold only public keys, so breaches yield nothing useful. They outperform password managers by removing the human element from attacks. In power user scenarios for 2025, you can even store them on removable devices or transfer between platforms securely.
+                </aside>
+            </section>
+            
+            <!-- Slide 15: Sign-In Step 1 -->
+            <section>
+                <h2>Sign-in: Step 1</h2>
+                <h3 class="accent-blue">Focus username.</h3>
+                <img src="signin_step1_username_field.png" alt="Sign-in Step 1: Username field" style="max-width: 65%; max-height: 450px; margin: 20px auto; display: block; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); object-fit: contain;">
+                <aside class="notes">
+                    Let's walk through a sign-in screenshot by screenshot. Step 1: Focus the username field. The system (like iOS's QuickType) suggests your saved passkey automatically, thanks to iCloud Keychain sync. No typing needed—just recognition.
+                </aside>
+            </section>
+            
+            <!-- Slide 16: Sign-In Step 2 -->
+            <section>
+                <div class="impact-text">
+                    <span class="accent-blue">Select passkey.</span><br>
+                    <span class="accent-purple">Face ID.</span>
+                </div>
+                <img src="signin_step2_faceid_prompt.png" alt="Sign-in Step 2: Face ID prompt" style="max-width: 65%; max-height: 450px; margin: 20px auto; display: block; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); object-fit: contain;">
+                <aside class="notes">
+                    Step 2: Tap the suggestion, authenticate with Face ID or Touch ID, and you're signed in. It's one fluid motion—faster than any password flow. With 2025's automatic upgrades, this can happen silently during a password login, easing the transition.
+                </aside>
+            </section>
+            
+            <!-- Slide 17: Passkey Benefits -->
+            <section>
+                <div class="impact-text">
+                    <span class="accent-green">Faster.</span><br>
+                    <span class="accent-green">Auto upgrades.</span><br>
+                    <span class="accent-green">Silent creation.</span>
+                </div>
+                <aside class="notes">
+                    The benefits are clear: Creation and sign-in are exponentially faster, with no complexity rules. Automatic upgrades mean silent passkey creation during traditional logins, reducing friction. In 2025, features like Apple's management endpoints keep them up-to-date automatically. Plus, they're device-agnostic with cross-platform support growing.
+                </aside>
+            </section>
+            
+            <!-- Slide 17a: Passkey Success Metrics -->
+            <section>
+                <div class="impact-text accent-green">Passkey Impact</div>
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 30px; max-width: 900px; margin: 40px auto;">
+                    <div class="data-card fragment">
+                        <div class="stat-number" style="font-size: 72px; background: linear-gradient(135deg, #4CAF50, #8BC34A); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent;">4x</div>
+                        <div class="stat-label">faster than<br>password login</div>
+                    </div>
+                    <div class="data-card fragment">
+                        <div class="stat-number" style="font-size: 72px; background: linear-gradient(135deg, #4CAF50, #8BC34A); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent;">99.9%</div>
+                        <div class="stat-label">phishing attack<br>prevention rate</div>
+                    </div>
+                    <div class="data-card fragment">
+                        <div class="stat-number" style="font-size: 72px; background: linear-gradient(135deg, #4CAF50, #8BC34A); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent;">75%</div>
+                        <div class="stat-label">reduction in<br>authentication time</div>
+                    </div>
+                    <div class="data-card fragment">
+                        <div class="stat-number" style="font-size: 72px; background: linear-gradient(135deg, #4CAF50, #8BC34A); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent;">0</div>
+                        <div class="stat-label">passwords<br>to remember</div>
+                    </div>
+                </div>
+                <aside class="notes">
+                    Here's the passkey advantage in numbers: [CLICK] Sign-in is 4 times faster than typing passwords. [CLICK] 99.9% effective at preventing phishing—essentially bulletproof. [CLICK] 75% reduction in total authentication time including retries and resets. [CLICK] And the best number: zero passwords to remember, ever. These aren't theoretical—these are real-world measurements from companies deploying passkeys today.
+                </aside>
+            </section>
+            
+            <!-- Slide 18: iOS Code Intro -->
+            <section>
+                <h2>Creating passkey: iOS</h2>
+                <aside class="notes">
+                    Time to get practical—let's implement passkeys in an iOS app using the ASAuthorization API. This is straightforward and integrates into existing flows without a full rewrite. We'll break the code down step by step, and remember, with iOS 18 and the latest updates from WWDC 2024, there are new APIs for streamlined passkey adoption and account creation.
+                </aside>
+            </section>
+            
+            <!-- Slide 19: Code Part 1 -->
+            <section>
+                <pre><code data-trim data-noescape>
+<span class="code-keyword">import</span> <span class="code-string">AuthenticationServices</span>
+                </code></pre>
+                <aside class="notes">
+                    First, import the AuthenticationServices framework—it's built-in to iOS, so no extra setup. This gives you access to passkey providers and requests.
+                </aside>
+            </section>
+            
+            <!-- Slide 20: Code Part 2 -->
+            <section>
+                <pre><code data-trim data-noescape>
+<span class="code-keyword">let</span> provider = <span class="code-function">ASAuthorizationPlatformPublicKeyCredentialProvider</span>(
+    relyingPartyIdentifier: <span class="code-string">"example.com"</span>
+)
+
+<span class="code-keyword">let</span> request = provider.<span class="code-function">createCredentialRegistrationRequest</span>(
+    challenge: challengeData,
+    name: <span class="code-string">"User Name"</span>,
+    userID: userIDData
+)
+                </code></pre>
+                <aside class="notes">
+                    Next, create the provider with your domain as the relying party identifier. Then, build the registration request: Fetch a challenge from your server, add the user's name and ID. This tells the system to generate a unique key pair securely.
+                </aside>
+            </section>
+            
+            <!-- Slide 21: Code Part 3 -->
+            <section>
+                <pre><code data-trim data-noescape>
+<span class="code-keyword">let</span> authController = <span class="code-function">ASAuthorizationController</span>(
+    authorizationRequests: [request]
+)
+authController.delegate = <span class="code-keyword">self</span>
+authController.presentationContextProvider = <span class="code-keyword">self</span>
+authController.<span class="code-function">performRequests</span>()
+                </code></pre>
+                <aside class="notes">
+                    Finally, initialize the authorization controller with your request, set the delegate for callbacks, and the presentation context for UI. Call performRequests() to show the system sheet—iOS handles the biometrics and key gen. On success, verify on your backend. This whole process is drop-in and supports 2025's advanced features like secure credential exchange.
+                </aside>
+            </section>
+            
+            <!-- Slide 22: Backend Integration -->
+            <section>
+                <h2>Backend</h2>
+                <ul>
+                    <li>🌐 WebAuthn.</li>
+                    <li>🔐 FIDO2.</li>
+                    <li>✅ No rewrite.</li>
+                </ul>
+                <aside class="notes">
+                    On the backend, adopt WebAuthn and FIDO2 standards—use libraries like fido2 for Node or Python to handle public key storage and challenge verification. No need for a complete architectural overhaul; just add endpoints for registration and assertion. In enterprise setups, tie this to attestation for managed devices. Let me show you a simple example.
+                </aside>
+            </section>
+            
+            <!-- Slide 22a: Backend Code Example -->
+            <section>
+                <h2>Backend: Node.js Example</h2>
+                <pre><code data-trim data-noescape>
+<span class="code-keyword">const</span> { Fido2Lib } = <span class="code-function">require</span>(<span class="code-string">'fido2-lib'</span>);
+
+<span class="code-comment">// Initialize FIDO2</span>
+<span class="code-keyword">const</span> f2l = <span class="code-keyword">new</span> <span class="code-function">Fido2Lib</span>({
+    rpId: <span class="code-string">"example.com"</span>,
+    rpName: <span class="code-string">"My App"</span>,
+    challengeSize: 32,
+    attestation: <span class="code-string">"none"</span>
+});
+
+<span class="code-comment">// Generate registration challenge</span>
+<span class="code-keyword">const</span> registrationOptions = <span class="code-keyword">await</span> f2l.<span class="code-function">attestationOptions</span>();
+
+<span class="code-comment">// Verify registration response</span>
+<span class="code-keyword">const</span> attestationResult = <span class="code-keyword">await</span> f2l.<span class="code-function">attestationResult</span>(
+    clientAttestationResponse,
+    registrationOptions
+);
+
+<span class="code-comment">// Store public key and credential ID</span>
+<span class="code-keyword">await</span> <span class="code-function">saveUserCredential</span>(userId, {
+    credentialId: attestationResult.authnrData.credId,
+    publicKey: attestationResult.authnrData.publicKey
+});
+                </code></pre>
+                <aside class="notes">
+                    Here's a simple Node.js example using the fido2-lib package. We initialize the FIDO2 library with our domain details, generate a challenge for registration, verify the client's response, and store the credential. The library handles all the cryptographic verification—you just need to store the credential ID and public key. For authentication, you'd generate a new challenge and verify the signature. Most languages have similar libraries making implementation straightforward.
+                </aside>
+            </section>
+            
+            <!-- Slide 23: Edge Cases -->
+            <section>
+                <h2>No browser passkey?</h2>
+                <h3 class="accent-blue">Cross-device: QR.</h3>
+                <aside class="notes">
+                    Handle edge cases gracefully: If no passkey in the browser, fallback to passwords or prompt creation. For cross-device, use QR codes or Bluetooth—scan on your phone, authenticate, and sign in elsewhere. This maintains phishing resistance. 2025 tips include signing in from someone else's computer via removable devices.
+                </aside>
+            </section>
+            
+            <!-- Slide 23a: QR Code Sign-in Step 1 -->
+            <section>
+                <h2>Cross-Device Sign-In</h2>
+                <h3 class="accent-blue">Step 1: Scan QR Code</h3>
+                <img src="qr-code-to-sign-in-passkey.png" alt="QR code sign-in step 1" style="max-width: 65%; max-height: 450px; margin: 20px auto; display: block; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); object-fit: contain;">
+                <aside class="notes">
+                    When signing in on a device without your passkey, the system generates a QR code. Simply scan it with your phone that has the passkey stored. This creates a secure connection between devices.
+                </aside>
+            </section>
+            
+            <!-- Slide 23b: QR Code Sign-in Step 2 -->
+            <section>
+                <h3 class="accent-blue">Step 2: Authenticate on Phone</h3>
+                <img src="qr-code-to-sign-in-passkey-2.png" alt="QR code sign-in step 2" style="max-width: 65%; max-height: 450px; margin: 20px auto; display: block; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); object-fit: contain;">
+                <aside class="notes">
+                    After scanning, authenticate with Face ID or Touch ID on your phone. The passkey securely signs the challenge, and you're instantly logged in on the other device. No passwords typed, no phishing risk—just seamless, secure authentication across devices.
+                </aside>
+            </section>
+            
+            <!-- Slide 23c: How QR Code Flow Works -->
+            <section>
+                <h2>How It Works: QR Code Flow</h2>
+                <img src="qr_code_flow_overview.png" alt="QR code authentication flow diagram" style="max-width: 85%; max-height: 500px; margin: 20px auto; display: block; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); object-fit: contain;">
+                <aside class="notes">
+                    Let's dive into the technical flow. The QR code contains a unique session identifier. When scanned, it establishes a secure connection between devices. The server generates a cryptographic challenge, your phone signs it with the private key, and sends the signature back through an encrypted tunnel. The server validates using the public key. It's one-time use, time-sensitive, and cryptographically secure.
+                </aside>
+            </section>
+            
+            <!-- Slide 23d: Technical Details -->
+            <section>
+                <h2>Cross-Device Authentication</h2>
+                <ul>
+                    <li class="fragment">🔐 One-time QR code with session ID</li>
+                    <li class="fragment">🔄 Cryptographic challenge-response</li>
+                    <li class="fragment">📱 Private key never leaves device</li>
+                    <li class="fragment">🛡️ Encrypted data transmission</li>
+                    <li class="fragment">⏱️ Time-sensitive validation</li>
+                </ul>
+                <aside class="notes">
+                    The security is bulletproof: [CLICK] QR codes are single-use and expire quickly. [CLICK] The authentication uses asymmetric cryptography—your private key signs challenges but never transmits. [CLICK] Private keys stay on device. [CLICK] All communication is encrypted end-to-end. [CLICK] Time-sensitive validation prevents replay attacks. This enables passkey use across any devices without cloud sync, requiring only WebAuthn support, a camera, and internet connection.
+                </aside>
+            </section>
+            
+            <!-- Slide 23e: Bluetooth Proximity Verification -->
+            <section>
+                <h2>Security Layer: Bluetooth Proximity</h2>
+                <img src="bluetooth_flow_overview.png" alt="Bluetooth proximity verification diagram" style="max-width: 85%; max-height: 450px; margin: 20px auto; display: block; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); object-fit: contain;">
+                <aside class="notes">
+                    After scanning the QR code, devices use Bluetooth to verify physical proximity. This isn't an alternative—it's a required security layer. The QR code initiates the connection with session data, then Bluetooth ensures both devices are physically near each other, preventing remote attacks. This dual-channel approach (visual QR + radio Bluetooth) makes the authentication both secure and resistant to phishing or man-in-the-middle attacks.
+                </aside>
+            </section>
+            
+            <!-- Slide 24: Sync & Sharing -->
+            <section>
+                <h2>iCloud sync.</h2>
+                <h3 class="accent-purple">Sharing: AirDrop.</h3>
+                <aside class="notes">
+                    Syncing is seamless with iCloud Keychain across Apple devices, ensuring availability everywhere. For sharing, use AirDrop for trusted transfers—like family accounts. Screenshots here show silent creation notifications, multi-account management in the Passwords app, and AirDrop UI. In 2025, new ways to drive upgrades make this even more user-friendly.
+                </aside>
+            </section>
+            
+            <!-- Slide 24a: Passkey Sharing Demo -->
+            <section>
+                <h2>Passkey Sharing in Action</h2>
+                <video controls style="max-width: 70%; max-height: 450px; margin: 20px auto; display: block; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
+                    <source src="passkey_sharing.MP4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+                <aside class="notes">
+                    Here's a live demonstration of passkey sharing via AirDrop. Watch how seamlessly you can share access with trusted family members or team members. The entire process is encrypted end-to-end, maintaining security while providing convenience. This feature is particularly useful for shared accounts or when helping family members set up their devices.
+                </aside>
+            </section>
+            
+            <!-- Slide 24b: Global Adoption Metrics -->
+            <section>
+                <div class="impact-text accent-blue">Global Momentum</div>
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 30px; max-width: 900px; margin: 40px auto;">
+                    <div class="data-card fragment">
+                        <div class="stat-number" style="font-size: 72px; background: var(--gradient-3); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent;">1B+</div>
+                        <div class="stat-label">passkey-enabled<br>accounts worldwide</div>
+                    </div>
+                    <div class="data-card fragment">
+                        <div class="stat-number" style="font-size: 72px; background: var(--gradient-3); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent;">400M</div>
+                        <div class="stat-label">Google accounts<br>using passkeys</div>
+                    </div>
+                    <div class="data-card fragment">
+                        <div class="stat-number" style="font-size: 72px; background: var(--gradient-3); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent;">200+</div>
+                        <div class="stat-label">major websites<br>support passkeys</div>
+                    </div>
+                    <div class="data-card fragment">
+                        <div class="stat-number" style="font-size: 72px; background: var(--gradient-3); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent;">52%</div>
+                        <div class="stat-label">global consumer<br>awareness rate</div>
+                    </div>
+                </div>
+                <aside class="notes">
+                    The adoption is accelerating rapidly: [CLICK] Over 1 billion passkey-enabled accounts globally as of 2025. [CLICK] Google alone reports 400 million accounts using passkeys. [CLICK] More than 200 major websites and apps now support passkeys including Amazon, eBay, PayPal, and major banks. [CLICK] Consumer awareness has reached 52% globally—up from near zero just two years ago. This isn't the future anymore—it's happening now.
+                </aside>
+            </section>
+            
+            <!-- Slide 26: Recovery Strategies -->
+            <section>
+                <h2>Recovery</h2>
+                <ul>
+                    <li>🔄 Fallback.</li>
+                    <li>🤔 "Forgot?" strategies.</li>
+                </ul>
+                <aside class="notes">
+                    Recovery is crucial: For 'forgot password' scenarios, provide temporary fallbacks to traditional methods while encouraging passkey adoption. Best practices include robust enrollment flows and recovery contacts. In 2025, Android's new account recovery features and Apple's secure exchanges simplify this without compromising security.
+                </aside>
+            </section>
+            
+            <!-- Slide 26a: Passkey Limitations & Challenges -->
+            <section>
+                <h2>Real-World Challenges</h2>
+                <h3 class="accent-coral">What to Consider</h3>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; max-width: 1000px; margin: 30px auto;">
+                    <div class="data-card" style="padding: 20px;">
+                        <h4 style="color: var(--primary-coral); margin-bottom: 15px; font-size: 22px;">⚠️ Technical Challenges</h4>
+                        <ul style="font-size: 18px; text-align: left; line-height: 1.4;">
+                            <li class="fragment" style="margin: 8px 0; padding: 8px; background: transparent; border: none;">📱 Device loss recovery complexity</li>
+                            <li class="fragment" style="margin: 8px 0; padding: 8px; background: transparent; border: none;">🔗 Cross-platform sync limitations</li>
+                            <li class="fragment" style="margin: 8px 0; padding: 8px; background: transparent; border: none;">🏢 Legacy system integration</li>
+                            <li class="fragment" style="margin: 8px 0; padding: 8px; background: transparent; border: none;">🌍 Inconsistent browser support</li>
+                        </ul>
+                    </div>
+                    <div class="data-card" style="padding: 20px;">
+                        <h4 style="color: var(--primary-gold); margin-bottom: 15px; font-size: 22px;">👥 Human Challenges</h4>
+                        <ul style="font-size: 18px; text-align: left; line-height: 1.4;">
+                            <li class="fragment" style="margin: 8px 0; padding: 8px; background: transparent; border: none;">🎓 User education requirements</li>
+                            <li class="fragment" style="margin: 8px 0; padding: 8px; background: transparent; border: none;">😟 Trust in new technology</li>
+                            <li class="fragment" style="margin: 8px 0; padding: 8px; background: transparent; border: none;">🔄 Migration from passwords</li>
+                            <li class="fragment" style="margin: 8px 0; padding: 8px; background: transparent; border: none;">👴 Accessibility for all users</li>
+                        </ul>
+                    </div>
+                </div>
+                <p class="fragment" style="font-size: 22px; color: var(--success-green); margin-top: 25px; text-align: center;">
+                    <strong>Solutions exist for each challenge - plan accordingly!</strong>
+                </p>
+                <aside class="notes">
+                    Let's be honest about challenges: [CLICK] Device loss is complex—need backup methods like recovery codes or trusted contacts. [CLICK] Cross-platform sync isn't universal yet—Apple and Google don't share. [CLICK] Legacy systems may need gradual integration. [CLICK] Some older browsers lack support. [CLICK] Users need education on what passkeys are. [CLICK] Building trust takes time and clear communication. [CLICK] Migration must be gradual, not forced. [CLICK] Ensure accessibility for users who can't use biometrics. [CLICK] Good news: Each challenge has proven solutions—plan your rollout carefully!
+                </aside>
+            </section>
+            
+            <!-- Slide 26a2: Migration Strategy Overview -->
+            <section>
+                <h2>Migration Strategy</h2>
+                <h3 class="accent-blue">Your Roadmap to Passwordless</h3>
+                <div style="max-width: 800px; margin: 40px auto;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin: 40px 0;">
+                        <div class="fragment" style="text-align: center; flex: 1;">
+                            <div style="width: 80px; height: 80px; border-radius: 50%; background: var(--gradient-1); margin: 0 auto 20px; display: flex; align-items: center; justify-content: center; font-size: 36px;">📊</div>
+                            <h4 style="color: var(--primary-purple); font-size: 22px;">Phase 1</h4>
+                            <p style="color: var(--text-secondary); font-size: 18px;">Foundation</p>
+                        </div>
+                        <div class="fragment" style="color: var(--text-muted); font-size: 32px;">→</div>
+                        <div class="fragment" style="text-align: center; flex: 1;">
+                            <div style="width: 80px; height: 80px; border-radius: 50%; background: var(--gradient-3); margin: 0 auto 20px; display: flex; align-items: center; justify-content: center; font-size: 36px;">🚀</div>
+                            <h4 style="color: var(--primary-teal); font-size: 22px;">Phase 2</h4>
+                            <p style="color: var(--text-secondary); font-size: 18px;">Expansion</p>
+                        </div>
+                        <div class="fragment" style="color: var(--text-muted); font-size: 32px;">→</div>
+                        <div class="fragment" style="text-align: center; flex: 1;">
+                            <div style="width: 80px; height: 80px; border-radius: 50%; background: var(--gradient-4); margin: 0 auto 20px; display: flex; align-items: center; justify-content: center; font-size: 36px;">✨</div>
+                            <h4 style="color: var(--success-green); font-size: 22px;">Phase 3</h4>
+                            <p style="color: var(--text-secondary); font-size: 18px;">Default</p>
+                        </div>
+                    </div>
+                    <p class="fragment" style="text-align: center; font-size: 24px; color: var(--text-secondary); margin-top: 40px;">
+                        <strong>6-Month Journey to Passwordless</strong>
+                    </p>
+                </div>
+                <aside class="notes">
+                    Here's your roadmap to passwordless authentication. [CLICK] Phase 1: Foundation - Build the infrastructure. [CLICK] [CLICK] Phase 2: Expansion - Drive adoption. [CLICK] [CLICK] Phase 3: Default - Make it standard. [CLICK] This proven 6-month journey minimizes risk while maximizing adoption. Let's dive into each phase.
+                </aside>
+            </section>
+            
+            <!-- Slide 26a3: Migration Phase 1 -->
+            <section>
+                <h2>Phase 1: Foundation</h2>
+                <h3 class="accent-purple" style="font-size: 24px; margin-bottom: 15px;">Months 1-2: Build & Test</h3>
+                <div style="max-width: 800px; margin: 10px auto;">
+                    <div class="data-card" style="padding: 20px;">
+                        <div style="text-align: center; margin-bottom: 15px;">
+                            <span style="font-size: 40px;">📊</span>
+                        </div>
+                        <ul style="font-size: 18px; line-height: 1.4;">
+                            <li class="fragment" style="margin-bottom: 8px;">✅ Add passkey support alongside passwords</li>
+                            <li class="fragment" style="margin-bottom: 8px;">🧪 A/B test with 5-10% of users</li>
+                            <li class="fragment" style="margin-bottom: 8px;">📈 Track: creation rate, success rate, support tickets</li>
+                            <li class="fragment">🔧 Refine based on feedback</li>
+                        </ul>
+                    </div>
+                </div>
+                <aside class="notes">
+                    Phase 1 is about laying the foundation. [CLICK] Add passkey support without removing passwords—no disruption. [CLICK] Start with A/B testing on 5-10% of users to minimize risk. [CLICK] Track critical metrics: How many create passkeys? What's the success rate? Are support tickets increasing? [CLICK] Use this data to refine the experience before expanding. This phase typically takes 1-2 months.
+                </aside>
+            </section>
+            
+            <!-- Slide 26a4: Migration Phase 2 -->
+            <section>
+                <h2>Phase 2: Expansion</h2>
+                <h3 class="accent-teal" style="font-size: 24px; margin-bottom: 15px;">Months 3-4: Drive Adoption</h3>
+                <div style="max-width: 800px; margin: 10px auto;">
+                    <div class="data-card" style="padding: 20px;">
+                        <div style="text-align: center; margin-bottom: 15px;">
+                            <span style="font-size: 40px;">🚀</span>
+                        </div>
+                        <ul style="font-size: 18px; line-height: 1.4;">
+                            <li class="fragment" style="margin-bottom: 8px;">📢 Prompt existing users to upgrade</li>
+                            <li class="fragment" style="margin-bottom: 8px;">🎯 Target: power users, mobile users, security-conscious</li>
+                            <li class="fragment" style="margin-bottom: 8px;">🏆 Incentives: faster checkout, exclusive features</li>
+                            <li class="fragment">📊 Goal: 50%+ adoption rate</li>
+                        </ul>
+                    </div>
+                </div>
+                <aside class="notes">
+                    Phase 2 focuses on driving adoption. [CLICK] Actively prompt users to add passkeys during login. [CLICK] Target strategically: Tech-savvy users become advocates, mobile users love the convenience, security-conscious users appreciate the protection. [CLICK] Offer incentives: Faster checkout, early access to features, or visual security badges. [CLICK] Goal: Get 50% or more users on passkeys. This momentum phase takes 2 months.
+                </aside>
+            </section>
+            
+            <!-- Slide 26a5: Migration Phase 3 -->
+            <section>
+                <h2>Phase 3: Default</h2>
+                <h3 class="accent-green" style="font-size: 24px; margin-bottom: 15px;">Months 5-6: Make it Standard</h3>
+                <div style="max-width: 800px; margin: 10px auto;">
+                    <div class="data-card" style="padding: 20px;">
+                        <div style="text-align: center; margin-bottom: 15px;">
+                            <span style="font-size: 40px;">✨</span>
+                        </div>
+                        <ul style="font-size: 18px; line-height: 1.4;">
+                            <li class="fragment" style="margin-bottom: 8px;">🔄 Passkeys default for new users</li>
+                            <li class="fragment" style="margin-bottom: 8px;">📉 No passwords for new accounts</li>
+                            <li class="fragment" style="margin-bottom: 8px;">🛟 Keep password fallback 12+ months</li>
+                            <li class="fragment">🎉 Celebrate: You're passwordless!</li>
+                        </ul>
+                    </div>
+                </div>
+                <aside class="notes">
+                    Phase 3 makes passkeys the standard. [CLICK] New users get passkeys by default—no password option. [CLICK] Stop offering passwords for new account creation. [CLICK] Critical: Keep password fallback for existing users at least 12 months. Support recovery scenarios and edge cases. Don't strand users! [CLICK] Celebrate the achievement—you've successfully migrated to passwordless! Most users won't even notice the transition.
+                </aside>
+            </section>
+            
+            <!-- Slide 26b: Enterprise & Accessibility -->
+            <section>
+                <h2>Enterprise & Accessibility</h2>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; max-width: 1000px; margin: 30px auto;">
+                    <div class="data-card">
+                        <h3 style="color: var(--primary-purple); margin-bottom: 20px;">🏢 Enterprise Considerations</h3>
+                        <ul style="font-size: 20px; text-align: left;">
+                            <li class="fragment">🔏 Attestation for device trust</li>
+                            <li class="fragment">📱 MDM integration</li>
+                            <li class="fragment" style="white-space: nowrap;">✅ Compliance (FIDO2 certified)</li>
+                            <li class="fragment">🚪 Conditional access policies</li>
+                        </ul>
+                    </div>
+                    <div class="data-card">
+                        <h3 style="color: var(--primary-teal); margin-bottom: 20px;">♿ Accessibility<br>Features</h3>
+                        <ul style="font-size: 20px; text-align: left;">
+                            <li class="fragment">👁️ Screen reader support</li>
+                            <li class="fragment">👆 Alternative biometrics</li>
+                            <li class="fragment">🔢 PIN fallback options</li>
+                            <li class="fragment">🔑 External authenticators</li>
+                        </ul>
+                    </div>
+                </div>
+                <aside class="notes">
+                    Let's address enterprise and accessibility needs. [CLICK] For enterprises: Attestation ensures device authenticity. [CLICK] MDM systems can manage passkey policies. [CLICK] FIDO2 certification helps with compliance requirements like PSD2. [CLICK] Conditional access integrates with existing security policies. [CLICK] For accessibility: Full screen reader support is built-in. [CLICK] Users can choose Touch ID, Face ID, or Windows Hello based on their needs. [CLICK] PIN codes provide an alternative when biometrics aren't suitable. [CLICK] External security keys work for users who prefer physical tokens. The key is providing options while maintaining security.
+                </aside>
+            </section>
+            
+            <!-- Slide 27: Passwordless Future -->
+            <section>
+                <div class="geometric-accent accent-square"></div>
+                <div class="impact-text">
+                    <span class="accent-blue">Passwordless future.</span><br>
+                    <span class="accent-purple">2FA less secure.</span>
+                </div>
+                <aside class="notes">
+                    We're transitioning to a truly passwordless world, where passkeys render traditional 2FA less secure by comparison—they fix root issues like phishing at the source. In 2025, with passkeys in mainstream use across banking and more, the focus is on solving real-world problems like credential stuffing. Convince users by highlighting simplicity—guide them with prompts during logins.
+                </aside>
+            </section>
+            
+            <!-- Slide 28: Recap & Action -->
+            <section>
+                <h2>Recap</h2>
+                <h3 class="accent-green">Secure. Convenient. Now.</h3>
+                <h3 style="margin-top: 40px;">Action: Implement. Guide users.</h3>
+                <ul style="margin-top: 40px;">
+                    <li class="fragment">✅ Passkeys eliminate phishing</li>
+                    <li class="fragment">🚀 One-tap authentication</li>
+                    <li class="fragment">🔐 Private keys never leave device</li>
+                    <li class="fragment">📱 Cross-device ready</li>
+                </ul>
+                <aside class="notes">
+                    To recap: [CLICK] Passkeys offer unmatched security against breaches and phishing. [CLICK] Superior convenience with one-tap flows. [CLICK] Private keys stay secure on device. [CLICK] And they're cross-device ready—with 2025 seeing them go mainstream. Your call to action: Start implementing in your apps, support passwords as a bridge, but actively guide users to passkeys for a better experience.
+                </aside>
+            </section>
+            
+            <!-- Slide 29: Resources -->
+            <section>
+                <h2>Resources & Next Steps</h2>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; max-width: 900px; margin: 30px auto;">
+                    <div class="data-card" style="padding: 30px;">
+                        <h4 style="color: var(--primary-blue); font-size: 24px; margin-bottom: 20px;">📚 Specs & Docs</h4>
+                        <ul style="font-size: 18px; line-height: 1.8; list-style: none; padding: 0;">
+                            <li style="margin-bottom: 15px;">🌐 WebAuthn Spec<br>
+                                <code style="color: var(--primary-blue); font-size: 16px;">w3.org/TR/webauthn</code>
+                            </li>
+                            <li style="margin-bottom: 15px;">🔐 FIDO Alliance<br>
+                                <code style="color: var(--primary-blue); font-size: 16px;">fidoalliance.org</code>
+                            </li>
+                            <li>🍎 Apple Developer<br>
+                                <code style="color: var(--primary-blue); font-size: 16px;">developer.apple.com/passkeys</code>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="data-card" style="padding: 30px;">
+                        <h4 style="color: var(--primary-purple); font-size: 24px; margin-bottom: 20px;">💻 Code & Libraries</h4>
+                        <ul style="font-size: 18px; line-height: 1.8; list-style: none; padding: 0;">
+                            <li style="margin-bottom: 15px;">📦 SimpleWebAuthn<br>
+                                <code style="color: var(--primary-purple); font-size: 16px;">github.com/MasterKale/SimpleWebAuthn</code>
+                            </li>
+                            <li style="margin-bottom: 15px;">🔧 Fido2-lib (Node.js)<br>
+                                <code style="color: var(--primary-purple); font-size: 16px;">npmjs.com/package/fido2-lib</code>
+                            </li>
+                            <li>🐍 Python-fido2<br>
+                                <code style="color: var(--primary-purple); font-size: 16px;">github.com/Yubico/python-fido2</code>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <aside class="notes">
+                    Here are essential resources to continue your passkey journey. The WebAuthn spec is your technical bible. FIDO Alliance has implementation guides and certification info. For code, SimpleWebAuthn is the go-to JavaScript library—it abstracts complexity beautifully. Platform-specific docs from Apple, Google, and Microsoft are invaluable. Start implementing passkeys today!
+                </aside>
+            </section>
+            
+            <!-- Slide 30: Thank You & Questions -->
+            <section>
+                <div class="impact-text accent-blue">Thank you!</div>
+                <h2 style="margin-top: 30px;">Questions?</h2>
+                <div style="display: flex; align-items: center; justify-content: center; gap: 40px; margin-top: 40px;">
+                    <div style="text-align: center;">
+                        <img src="2025_SessionFeedback.png" alt="Session Feedback QR Code" style="width: 250px; height: 250px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
+                        <p style="margin-top: 20px; font-size: 24px; color: var(--text-secondary);">
+                            📝 Please share your feedback!<br>
+                            <span style="font-size: 18px; color: var(--text-muted);">Scan to rate this session</span>
+                        </p>
+                    </div>
+                </div>
+                <aside class="notes">
+                    Thank you for your attention—it's been a pleasure sharing this with you! Now, I'd love to hear from you: Questions? Thoughts on implementing passkeys in your projects? While we discuss, please scan the QR code to provide session feedback. Your input helps make future presentations even better. Fire away with any questions!
+                </aside>
+            </section>
+            
+            <!-- Slide 30: KCDC 2025 Sponsors -->
+            <section>
+                <img src="kcdc25_sponsorslide.jpeg" alt="KCDC 2025 Sponsors" style="max-width: 95%; max-height: 90vh; margin: auto; display: block; object-fit: contain;">
+                <aside class="notes">
+                    Before we wrap up, I'd like to thank all the sponsors who made KCDC 2025 possible. Their support enables events like this where we can share knowledge and advance our craft. Please visit their booths and thank them for supporting the developer community!
+                </aside>
+            </section>
+        </div>
+    </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/plugin/notes/notes.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/plugin/highlight/highlight.min.js"></script>
+    <script>
+        // Initialize Reveal.js
+        Reveal.initialize({
+            hash: true,
+            controls: true,
+            progress: true,
+            center: true,
+            transition: 'slide',
+            
+            // Display the slide number
+            slideNumber: 'c/t',
+            
+            // Enable speaker notes
+            showNotes: false,
+            
+            plugins: [ RevealNotes, RevealHighlight ]
+        });
+        
+        // Show instructions in console
+        console.log(`
+🎯 REVEAL.JS PRESENTATION WITH RESTORED UI!
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SPEAKER NOTES WINDOW:
+Press 'S' to open speaker notes in a new window
+
+FEATURES IN SPEAKER VIEW:
+• Current slide
+• Next slide preview  
+• Your speaker notes
+• Timer (click to reset)
+• Elapsed time
+
+NAVIGATION:
+→ / Space : Next slide
+← : Previous slide
+↑/↓ : Navigate vertically
+Home/End : First/Last slide
+F : Fullscreen
+ESC : Overview mode
+S : Speaker notes window
+B : Black screen
+
+Total: 30+ slides | ~35 minutes
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Ready to present! Press 'S' for speaker view! 🚀
+        `);
+        
+        // Detect system theme and update Reveal.js theme accordingly
+        function updateThemeBasedOnSystem() {
+            const themeLink = document.getElementById('theme');
+            if (themeLink && window.matchMedia) {
+                const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                const themeName = prefersDark ? 'black' : 'white';
+                themeLink.href = `https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/theme/${themeName}.min.css`;
+            }
+        }
+        
+        // Update theme on page load
+        document.addEventListener('DOMContentLoaded', updateThemeBasedOnSystem);
+        
+        // Listen for system theme changes
+        if (window.matchMedia) {
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', updateThemeBasedOnSystem);
+        }
+    </script>
+</body>
+</html>
